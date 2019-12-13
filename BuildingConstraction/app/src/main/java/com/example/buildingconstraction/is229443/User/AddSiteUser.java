@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,26 +16,33 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.buildingconstraction.R;
 import com.example.buildingconstraction.is229443.Model.PostModel;
+import com.example.buildingconstraction.is229443.contants.AppContants;
+import com.example.buildingconstraction.is229443.sharedPreference.AppSharedPref;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 
-public class SiteDescriptionUser extends AppCompatActivity {
+public class AddSiteUser extends AppCompatActivity {
 
     private ImageView imageViewConentImage;
     private EditText et_title;
@@ -43,21 +51,53 @@ public class SiteDescriptionUser extends AppCompatActivity {
     private ImageButton ibtn_cam,ibtn_gal;
     private int REQUEST_IMAGE_CAPTURE = 101;
     private int PICK_IMAGE = 102;
-    private static final String TAG = "SiteDescriptionUser";
+    private static final String TAG = "AddSiteUser";
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
+    AlertDialog alertDialog;
+    private UploadTask uploadTask;
+    private StorageReference reference;
+    private String title,description,postedBy,PostDate,imageUrlLink,key,comment;
+    boolean isApproved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_site_description_user);
+        setContentView(R.layout.activity_add_site);
         imageViewConentImage = findViewById(R.id.iv_container_of_post_image);
         et_title = findViewById(R.id.et_post_title);
         et_description = findViewById(R.id.et_description);
         btnSubmit = findViewById(R.id.btnsubmit);
         ibtn_cam = findViewById(R.id.ibtn_takePicture);
         ibtn_gal = findViewById(R.id.ibtn_pickimage);
+
+        Intent intent = getIntent();
+        title = intent.getStringExtra(AppContants.Title);
+        if(!TextUtils.isEmpty(title)) {
+            description = intent.getStringExtra(AppContants.description);
+            postedBy = intent.getStringExtra(AppContants.PostedBy);
+            PostDate = intent.getStringExtra(AppContants.PostDate);
+            imageUrlLink = intent.getStringExtra(AppContants.imageUriLink);
+            isApproved = intent.getBooleanExtra(AppContants.Approval, false);
+            key = intent.getStringExtra(AppContants.Key);
+
+            Glide.with(this)
+                    .load(imageUrlLink)
+                    .into(imageViewConentImage);
+            et_title.setText(title);
+            et_description.setText(description);
+            btnSubmit.setText("Update");
+
+        }
+
+
         firebaseStorage = FirebaseStorage.getInstance();
+
+        alertDialog =new  AlertDialog.Builder(this)
+                .setTitle("Please wait")
+                .setMessage("We Are working on it")
+                .setCancelable(false)
+                .create();
         storageReference = firebaseStorage.getReference();
 
         ibtn_cam.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +123,7 @@ public class SiteDescriptionUser extends AppCompatActivity {
     }
 
     private void submitData() {
+        alertDialog.show();
         uploadImage();
     }
 
@@ -129,69 +170,83 @@ public class SiteDescriptionUser extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         int random = new Random().nextInt(1000);
-        final UploadTask uploadTask = storageReference.child("Mustofa_mahud"+random+".jpeg").putBytes(data);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.i(TAG, "onFailure: "+exception.toString());
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.i(TAG, "onSuccess: Uploaded successfully");
-                getDownLoadUrl(uploadTask);
-            }
-        });
-    }
-
-    private void getDownLoadUrl(UploadTask uploadTask) {
+        reference = storageReference.child("Mustofa_"+random+"_Mahmud.png");
+        uploadTask = reference.putBytes(data);
+        if(uploadTask!=null){
+            Log.i(TAG, "getDownLoadUrl: upwork not null");
+        }
         uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
-                    throw task.getException();
+                    Log.i(TAG, "then: not successful");
+                    alertDialog.dismiss();
+                    Log.i(TAG, "then: "+task.getException().toString());
+                    throw Objects.requireNonNull(task.getException());
                 }
 
                 // Continue with the task to get the download URL
-                return storageReference.child("testImage.png").getDownloadUrl();
+                Task<Uri> downloadUrl = reference.getDownloadUrl();
+                Log.i(TAG, "then: "+downloadUrl.toString());
+                return downloadUrl;
             }
         }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
+                    String userName = AppSharedPref.getSharedPreferences().getString(AppContants.UserName,null);
+                    //
+                    Log.i(TAG, "onComplete: result "+downloadUri.toString());
                     String title = et_title.getText().toString().trim();
                     String description = et_description.getText().toString().trim();
                     String downloadUrl = downloadUri.toString().trim();
-                    String postedBy = "Mustofa Mahmud";
-                    String Date = "12/12/2019";
+                    String postedBy = userName;
+                    String Date = getDate();
                     PostModel postModel = new PostModel(title,downloadUrl,description,false,Date,postedBy);
+                    if(!btnSubmit.getText().toString().trim().equals("Update")) {
+                         key = FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child("posts")
+                                .child(userName)
+                                .push().getKey();
+                    }
+
+                    postModel.setPostKey(key);
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child("posts")
-                            .child("Mustofa_mahmud")
-                            .push()
+                            .child(userName)
+                            .child(key)
                             .setValue(postModel)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.i(TAG, "onSuccess: "+"Uploaded");
+                                    alertDialog.dismiss();
+                                    AddSiteUser.super.onBackPressed();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.i(TAG, "onFailure: failed to upload " +e.toString());
-                                }
-                            });
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i(TAG, "onFailure: failed to upload " +e.toString());
+                            alertDialog.dismiss();
+                        }
+                    });
 
                     Log.i(TAG, "onComplete: "+downloadUri);
                 } else {
+                    alertDialog.dismiss();
                     Log.i(TAG, "onComplete: error in here");
                 }
             }
         });
+
+    }
+
+    public String getDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
     }
 
 }

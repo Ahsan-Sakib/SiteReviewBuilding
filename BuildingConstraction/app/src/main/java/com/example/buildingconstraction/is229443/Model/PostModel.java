@@ -7,6 +7,8 @@ public class PostModel {
     boolean approval;
     String Date;
     String postedBy;
+    String postKey;
+    String rejectMessage;
 
     public PostModel() {
     }
@@ -19,6 +21,8 @@ public class PostModel {
         Date = date;
         this.postedBy = postedBy;
     }
+
+
 
     public String getTitle() {
         return title;
@@ -66,5 +70,21 @@ public class PostModel {
 
     public void setPostedBy(String postedBy) {
         this.postedBy = postedBy;
+    }
+
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
+    }
+
+    public String getRejectMessage() {
+        return rejectMessage;
+    }
+
+    public void setRejectMessage(String rejectMessage) {
+        this.rejectMessage = rejectMessage;
     }
 }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".is229443.User.SiteDescriptionForUser">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_user_site_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:layout_margin="16dp"
+            android:padding="8dp"
+            android:background="@drawable/button_back_rect"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/tv_user_site_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="date"
+                android:layout_margin="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_user_site_approval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="approval"
+                android:layout_margin="8dp"/>
+
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/tv_user_site_posted_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Posted By"
+            android:gravity="left"
+            android:layout_margin="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+
+        <ImageView
+            android:id="@+id/iv_user_site_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera"
+            android:layout_margin="16dp"
+            android:background="@drawable/button_back_rect"/>
+
+        <TextView
+            android:id="@+id/tv_user_site_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:layout_margin="16dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_user_site_rejectMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_margin="16dp"/>
+
+
+        <Button
+            android:id="@+id/btn_user_editpost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Edit Post"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:background="@drawable/button_back_corner_radious"/>
+
+    </LinearLayout>
+
+</ScrollView>

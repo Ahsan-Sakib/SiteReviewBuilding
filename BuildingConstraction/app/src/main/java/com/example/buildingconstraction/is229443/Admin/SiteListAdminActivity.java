@@ -1,7 +1,6 @@
 package com.example.buildingconstraction.is229443.Admin;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 
 
 public class SiteListAdminActivity extends AppCompatActivity {
-    private SiteListAdapter siteListAdapter;
+    private SiteListAdapterForBothUserAndAdmin siteListAdapter;
     private RecyclerView recyclerView;
     private ArrayList<PostModel> arrayList;
 
@@ -28,28 +27,38 @@ public class SiteListAdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_site_list2);
+        setContentView(R.layout.activity_site_list_for_admin);
         arrayList = new ArrayList<>();
-        arrayList = fetchData();
+        fetchData();
         recyclerView = findViewById(R.id.rv_site);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        siteListAdapter = new SiteListAdapter(arrayList,this);
+        siteListAdapter = new SiteListAdapterForBothUserAndAdmin(arrayList,this,0);
         recyclerView.setAdapter(siteListAdapter);
         siteListAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<PostModel> fetchData() {
-        final ArrayList<PostModel> tempHolder = new ArrayList<>();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        arrayList.clear();
+        fetchData();
+        siteListAdapter.notifyDataSetChanged();
+    }
+
+    private void fetchData() {
         DatabaseReference posts = FirebaseDatabase.getInstance().getReference().child("posts");
         posts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
                 for(DataSnapshot dataOfPostedBy : dataSnapshot.getChildren()){
                     for(DataSnapshot dataOfPost : dataOfPostedBy.getChildren()){
                         PostModel post = dataOfPost.getValue(PostModel.class);
-                        tempHolder.add(post);
+                        arrayList.add(post);
                     }
                 }
+                siteListAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -57,6 +66,5 @@ public class SiteListAdminActivity extends AppCompatActivity {
 
             }
         });
-        return tempHolder;
     }
 }

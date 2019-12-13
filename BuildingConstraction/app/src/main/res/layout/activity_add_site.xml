@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="4dp">
         <EditText
             android:layout_marginTop="16dp"
             android:id="@+id/et_post_title"
-            android:text="Title"
+            android:hint="Title"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:padding="8dp"
+            android:background="@drawable/button_back_rect"/>
 
         <ImageView
             android:id="@+id/iv_container_of_post_image"
-            android:src="@drawable/googleg_disabled_color_18"
+            android:src="@drawable/ic_camera"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_back_rect"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:orientation="horizontal"
             android:layout_marginBottom="16dp">
 
@@ -34,14 +38,14 @@
                 android:src="@drawable/ic_image_black_24dp"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                />
             <ImageButton
                 android:id="@+id/ibtn_takePicture"
                 android:src="@drawable/ic_camera"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                />
         </LinearLayout>
 
@@ -49,15 +53,21 @@
         <EditText
             android:id="@+id/et_description"
             android:hint="Description"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            android:gravity="start"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_back_rect"
+            android:padding="10dp"/>
         <Button
             android:id="@+id/btnsubmit"
-            android:text="submit"
+            android:text="s u b m i t"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:background="@drawable/button_back_corner_radious"
+            android:textColor="#fff"/>
 
     </LinearLayout>
-
-</ScrollView>

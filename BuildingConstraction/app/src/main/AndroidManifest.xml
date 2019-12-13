@@ -2,22 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.buildingconstraction">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".is229443.App.StartApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".is229443.ConstractionMonitorMainActivity"/>
-        <activity android:name=".is229443.Admin.SiteDescription"/>
-        <activity android:name=".is229443.SiteListActivity"/>
-        <activity android:name=".is229443.User.SiteDescriptionUser"/>
-        <activity android:name=".is229443.User.SiteListUserActivity"/>
+        <activity android:name=".is229443.User.SiteDescriptionForUser"></activity>
+        <activity android:name=".is229443.ConstractionMonitorMainActivity" />
+        <activity android:name=".is229443.Admin.AdminSiteDescription" />
+        <activity android:name=".is229443.User.AddSiteUser" />
+        <activity android:name=".is229443.User.SiteListUserActivity" />
+        <activity android:name=".is229443.Admin.SiteListAdminActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

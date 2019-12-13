@@ -1,6 +1,7 @@
 package com.example.buildingconstraction.is229443;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,15 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.buildingconstraction.R;
+import com.example.buildingconstraction.is229443.Admin.SiteListAdminActivity;
 import com.example.buildingconstraction.is229443.Model.AdminModel;
 import com.example.buildingconstraction.is229443.Model.UserModel;
 import com.example.buildingconstraction.is229443.User.SiteListUserActivity;
+import com.example.buildingconstraction.is229443.contants.AppContants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
 import static android.graphics.Color.WHITE;
 
@@ -82,13 +86,17 @@ public class ConstractionMonitorMainActivity extends AppCompatActivity implement
 
             case R.id.tv_admin:
                 isroleselected = 1;
-                roleadminTv.setBackgroundColor(BLUE);
+                roleadminTv.setBackgroundColor(Color.MAGENTA);
                 roleuserTv.setBackgroundColor(WHITE);
+                roleadminTv.setTextColor(WHITE);
+                roleuserTv.setTextColor(Color.BLACK);
                 break;
 
             case R.id.tv_user:
-                roleuserTv.setBackgroundColor(BLUE);
+                roleuserTv.setBackgroundColor(Color.MAGENTA);
                 roleadminTv.setBackgroundColor(WHITE);
+                roleuserTv.setTextColor(WHITE);
+                roleadminTv.setTextColor(BLACK);
                 isroleselected = 2;
                 break;
 
@@ -108,6 +116,8 @@ public class ConstractionMonitorMainActivity extends AppCompatActivity implement
                     if(obj.getId().equals(id) && obj.getPassword().equals(password)){
                         Toast.makeText(getApplicationContext(),"Succees",Toast.LENGTH_SHORT).show();
                         //showSiteList();
+                        Intent intent = new Intent(getApplicationContext(), SiteListAdminActivity.class);
+                        startActivity(intent);
                         isSuccess = true;
                         break;
                     }
@@ -137,7 +147,9 @@ public class ConstractionMonitorMainActivity extends AppCompatActivity implement
                     UserModel objuser = data.getValue(UserModel.class);
                     if(objuser.getId().equals(id) && objuser.getPassword().equals(password)  ){
                         isSuccess = true;
-                        showSiteUserList();
+                        Intent intent = new Intent(getApplicationContext(), SiteListUserActivity.class);
+                        intent.putExtra(AppContants.UserName,id);
+                        startActivity(intent);
                     }
                 }
 
@@ -155,8 +167,4 @@ public class ConstractionMonitorMainActivity extends AppCompatActivity implement
     }
 
 
-    private void showSiteUserList(){
-        Intent intent = new Intent(this, SiteListUserActivity.class);
-        startActivity(intent);
-    }
 }
